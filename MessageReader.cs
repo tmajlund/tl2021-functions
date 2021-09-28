@@ -12,7 +12,14 @@ namespace AzNan.MessageReader
             FunctionContext context)
         {
             var logger = context.GetLogger("MessageReader");
-            logger.LogInformation($"C# Queue trigger function processed: {myQueueItem}");
+            logger.LogInformation($"C# Queue trigger function processed: {vote}");
+
+            return new TableData
+            {
+                PartitionKey = vote.VoteId,
+                RowKey = $"{(DateTimeOffset.MaxValue.Ticks-vote.Timestamp.Ticks):d10}-{Guid.NewGuid():N}",
+                Vote = vote.Answer
+            };
         }
     }
 
@@ -20,9 +27,13 @@ namespace AzNan.MessageReader
     {
         public string PartitionKey { get; set; }
         public string RowKey { get; set; }
-        public string UserInfo { get; set; }
+        public string Vote { get; set; }
+    }
+
+    public class NewVote
+    {
+        public string VoteId { get; set; }
+        public DateTimeOffset Timestamp { get; set; }
         public string Vote { get; set; }
     }
 }
-
-//NewVote is a class not created yet. Need to understand the communication between api in swa-client and function-app
