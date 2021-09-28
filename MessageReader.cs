@@ -18,7 +18,7 @@ namespace AzNan.MessageReader
             {
                 PartitionKey = vote.VoteId,
                 RowKey = $"{(DateTimeOffset.MaxValue.Ticks-vote.Timestamp.Ticks):d10}-{Guid.NewGuid():N}",
-                Vote = vote.Answer
+                Vote = vote.Vote
             };
         }
     }
